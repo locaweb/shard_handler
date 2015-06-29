@@ -2,10 +2,25 @@ require 'shard_handler/version'
 require 'shard_handler/model'
 require 'shard_handler/cache'
 
+require 'active_support/per_thread_registry'
+
 module ShardHandler
   class InvalidShardName < StandardError; end
 
+  class RuntimeRegistry
+    extend ActiveSupport::PerThreadRegistry
+    attr_accessor :current_shard
+  end
+
   class << self
+    def current_shard
+      RuntimeRegistry.current_shard
+    end
+
+    def current_shard=(name)
+      RuntimeRegistry.current_shard = name.nil? ? nil : name.to_sym
+    end
+
     def setup(shards_config)
       Cache.connection_handlers = {}
 
