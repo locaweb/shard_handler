@@ -5,13 +5,10 @@ module ShardHandler
     self.abstract_class = true
 
     class << self
-      def current_shard_name
-        Thread.current[:current_shard_name]
-      end
-
       def connection_handler
-        return super if current_shard_name.blank?
-        ShardHandler::Cache.connection_handlers[current_shard_name] ||
+        return super unless ShardHandler.current_shard
+
+        ShardHandler::Cache.connection_handlers[ShardHandler.current_shard] ||
           raise(InvalidShardName)
       end
 

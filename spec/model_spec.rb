@@ -6,6 +6,7 @@ RSpec.describe ShardHandler::Model do
   describe '.connection_handler' do
     context 'no shard set' do
       it 'returns the default connection handler' do
+        ShardHandler.current_shard = nil
         expect(described_class.connection_handler)
           .to be(ActiveRecord::Base.default_connection_handler)
       end
@@ -21,14 +22,14 @@ RSpec.describe ShardHandler::Model do
       end
 
       it 'returns a connection handler for the shard' do
-        Thread.current[:current_shard_name] = :shard1
+        ShardHandler.current_shard = :shard1
         expect(described_class.connection_handler).to be shard1
       end
     end
 
     context 'invalid shard set' do
       it 'raises an error' do
-        Thread.current[:current_shard_name] = :invalid_shard
+        ShardHandler.current_shard = :invalid_shard
         expect {
           described_class.connection_handler
         }.to raise_error(ShardHandler::InvalidShardName)
