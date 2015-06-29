@@ -96,4 +96,9 @@ RSpec.configure do |config|
   # test failures related to randomization by passing the same `--seed` value
   # as the one that triggered the failure.
   Kernel.srand config.seed
+
+  config.before do
+    Thread.current[:current_shard_name] = nil
+    ShardHandler::Cache.connection_handlers = {}
+  end
 end
