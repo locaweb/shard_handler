@@ -19,7 +19,7 @@ module ShardHandler
     end
 
     def connection_handler_for(name)
-      @cache[name.to_sym]
+      @cache[name.to_sym] if name
     end
 
     protected

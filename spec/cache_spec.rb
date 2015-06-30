@@ -58,5 +58,11 @@ RSpec.describe ShardHandler::Cache do
           .to be_kind_of(ActiveRecord::ConnectionAdapters::ConnectionHandler)
       end
     end
+
+    context 'passing nil' do
+      it 'returns nil' do
+        expect(subject.connection_handler_for(nil)).to be nil
+      end
+    end
   end
 end
