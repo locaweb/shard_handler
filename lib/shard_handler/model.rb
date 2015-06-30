@@ -6,10 +6,7 @@ module ShardHandler
 
     class << self
       def connection_handler
-        return super unless ShardHandler.current_shard
-
-        ShardHandler::Cache.connection_handlers[ShardHandler.current_shard] ||
-          raise(InvalidShardName)
+        ShardHandler.current_connection_handler || super
       end
 
       private :establish_connection

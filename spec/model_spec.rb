@@ -4,35 +4,20 @@ RSpec.describe ShardHandler::Model do
   it { expect(described_class.abstract_class).to be true }
 
   describe '.connection_handler' do
-    context 'no shard set' do
-      it 'returns the default connection handler' do
-        ShardHandler.current_shard = nil
-        expect(described_class.connection_handler)
-          .to be(ActiveRecord::Base.default_connection_handler)
-      end
-    end
+    let(:handler) { double }
 
     context 'shard set' do
-      let(:shard1) { instance_double(ActiveRecord::ConnectionAdapters::ConnectionHandler) }
-      let(:shard2) { instance_double(ActiveRecord::ConnectionAdapters::ConnectionHandler) }
-
-      before do
-        ShardHandler::Cache.connection_handlers = { shard1: shard1,
-                                                    shard2: shard2 }
-      end
-
-      it 'returns a connection handler for the shard' do
-        ShardHandler.current_shard = :shard1
-        expect(described_class.connection_handler).to be shard1
+      it 'returns a connection handler for the current thread' do
+        allow(ShardHandler).to receive(:current_connection_handler) { handler }
+        expect(described_class.connection_handler).to be handler
       end
     end
 
-    context 'invalid shard set' do
-      it 'raises an error' do
-        ShardHandler.current_shard = :invalid_shard
-        expect {
-          described_class.connection_handler
-        }.to raise_error(ShardHandler::InvalidShardName)
+    context 'no shard set' do
+      it 'returns ActiveRecord\'s default connection handler' do
+        allow(ShardHandler).to receive(:current_connection_handler) { nil }
+        expect(described_class.connection_handler)
+          .to be(ActiveRecord::Base.default_connection_handler)
       end
     end
   end

@@ -25,5 +25,9 @@ module ShardHandler
     def current_shard=(name)
       RuntimeRegistry.current_shard = name.nil? ? nil : name.to_sym
     end
+
+    def current_connection_handler
+      @cache.connection_handler_for(current_shard)
+    end
   end
 end

@@ -29,4 +29,33 @@ RSpec.describe ShardHandler do
       described_class.setup(double)
     end
   end
+
+  describe '#current_connection_handler' do
+    before do
+      described_class.setup({
+        "shard1" => {
+          "adapter" => "postgresql",
+          "encoding" => "unicode",
+          "database" => "shard1",
+          "username" => "postgres",
+          "password" => nil
+        }
+      })
+    end
+
+    context 'current shard set' do
+      it 'returns the current connection handler for the thread' do
+        described_class.current_shard = :shard1
+        expect(described_class.current_connection_handler)
+          .to be_kind_of(ActiveRecord::ConnectionAdapters::ConnectionHandler)
+      end
+    end
+
+    context 'current shard not set' do
+      it 'returns nil' do
+        described_class.current_shard = nil
+        expect(described_class.current_connection_handler).to be nil
+      end
+    end
+  end
 end
