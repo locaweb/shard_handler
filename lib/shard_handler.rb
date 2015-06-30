@@ -13,17 +13,17 @@ module ShardHandler
   end
 
   class << self
+    def setup(shards_config)
+      @cache = Cache.new(shards_config)
+      @cache.cache_connection_handlers
+    end
+
     def current_shard
       RuntimeRegistry.current_shard
     end
 
     def current_shard=(name)
       RuntimeRegistry.current_shard = name.nil? ? nil : name.to_sym
-    end
-
-    def setup(shards_config)
-      @cache = Cache.new(shards_config)
-      @cache.cache_connection_handlers
     end
   end
 end
