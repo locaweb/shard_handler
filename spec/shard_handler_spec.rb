@@ -58,4 +58,30 @@ RSpec.describe ShardHandler do
       end
     end
   end
+
+  describe '#using' do
+    it 'yields a block' do
+      expect do |b|
+        described_class.using(:shard1, &b)
+      end.to yield_with_no_args
+    end
+
+    it 'changes current shard when yield the block' do
+      expect(described_class.current_shard).to be nil
+
+      described_class.using(:shard1) do
+        expect(described_class.current_shard).to be :shard1
+      end
+    end
+
+    it 'changes back to the old shard after block execution' do
+      described_class.current_shard = :shard2
+
+      described_class.using(:shard1) do
+        expect(described_class.current_shard).to be :shard1
+      end
+
+      expect(described_class.current_shard).to be :shard2
+    end
+  end
 end
