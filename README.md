@@ -1,7 +1,8 @@
 # ShardHandler
 
-This gem is a simple sharding implementation for Rails applications. It is
-supposed to be used in multi tenant apps.
+This gem is a simple sharding solution for Rails applications. It was created
+to be used in multitenant applications, when data is shared across multiple
+databases but accessed through the same ActiveRecord model.
 
 ## Installation
 
