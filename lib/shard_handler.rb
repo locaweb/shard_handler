@@ -13,6 +13,8 @@ module ShardHandler
   end
 
   class << self
+    attr_reader :cache
+
     def setup(shards_config)
       @cache = Cache.new(shards_config)
       @cache.cache_connection_handlers
