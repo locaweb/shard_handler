@@ -1,0 +1,6 @@
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: shard_handler_development
+  username: postgres
+  password:
