@@ -25,19 +25,23 @@ Or install it yourself as:
 All models that need sharding must inherit from `ShardHandler::Model`. For
 example:
 
-    class Post < ShardHandler::Model
-    end
+```ruby
+class Post < ShardHandler::Model
+end
+```
 
 Before executing any query, you must switch to the appropriate shard:
 
-    ShardHandler.current_shard = :shard1
-    puts Post.pluck(:title)
+```ruby
+ShardHandler.current_shard = :shard1
+puts Post.pluck(:title)
 
-    # or
+# or
 
-    ShardHandler.using(:shard1) do
-      puts Post.pluck(:title)
-    end
+ShardHandler.using(:shard1) do
+  puts Post.pluck(:title)
+end
+```
 
 ## Development
 
@@ -59,4 +63,3 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/[USERN
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
