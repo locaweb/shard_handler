@@ -30,7 +30,7 @@ class DbHelper
     def setup_shards
       connect_to_root
 
-      shards_config.each do |shard, config|
+      shards_config.each do |_shard, config|
         connection.create_database(config['database'], config)
         ActiveRecord::Base.establish_connection(config)
         execute_migrations
@@ -40,7 +40,7 @@ class DbHelper
     def drop_shards
       connect_to_root
 
-      shards_config.each do |shard, config|
+      shards_config.each do |_shard, config|
         connection.drop_database(config['database'])
       end
     end
@@ -48,10 +48,10 @@ class DbHelper
     private
 
     def execute_migrations
-      ActiveRecord::Schema.define(:version => 20140407140000) do
-        create_table "posts", :force => true do |t|
-          t.text "title"
-          t.text "body"
+      ActiveRecord::Schema.define(version: 20_140_407_140_000) do
+        create_table 'posts', force: true do |t|
+          t.text 'title'
+          t.text 'body'
         end
       end
     end

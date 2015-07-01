@@ -30,9 +30,9 @@ describe ShardHandler do
 
   context 'no shard set' do
     it 'raises an error' do
-      expect {
+      expect do
         Post.all.to_a
-      }.to raise_error(ActiveRecord::StatementInvalid, /PG::UndefinedTable/)
+      end.to raise_error(ActiveRecord::StatementInvalid, /PG::UndefinedTable/)
     end
   end
 

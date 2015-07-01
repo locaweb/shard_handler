@@ -24,9 +24,9 @@ RSpec.describe ShardHandler::Model do
 
   describe '.establish_connection' do
     it 'raises an error' do
-      expect {
+      expect do
         described_class.establish_connection
-      }.to raise_error(NoMethodError)
+      end.to raise_error(NoMethodError)
     end
   end
 end

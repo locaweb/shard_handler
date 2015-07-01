@@ -32,8 +32,8 @@ module ShardHandler
       @cache.connection_handler_for(current_shard)
     end
 
-    def using(shard, &block)
-      old_shard = self.current_shard
+    def using(shard, &_block)
+      old_shard = current_shard
       self.current_shard = shard
       yield
     ensure

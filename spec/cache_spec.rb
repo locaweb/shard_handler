@@ -3,19 +3,19 @@ require 'spec_helper'
 RSpec.describe ShardHandler::Cache do
   let(:configs) do
     {
-      "shard1" => {
-        "adapter" => "postgresql",
-        "encoding" => "unicode",
-        "database" => "shard1",
-        "username" => "postgres",
-        "password" => nil
+      'shard1' => {
+        'adapter' => 'postgresql',
+        'encoding' => 'unicode',
+        'database' => 'shard1',
+        'username' => 'postgres',
+        'password' => nil
       },
-      "shard2" => {
-        "adapter" => "postgresql",
-        "encoding" => "unicode",
-        "database" => "shard2",
-        "username" => "postgres",
-        "password" => nil
+      'shard2' => {
+        'adapter' => 'postgresql',
+        'encoding' => 'unicode',
+        'database' => 'shard2',
+        'username' => 'postgres',
+        'password' => nil
       }
     }
   end

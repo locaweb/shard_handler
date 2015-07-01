@@ -32,15 +32,13 @@ RSpec.describe ShardHandler do
 
   describe '#current_connection_handler' do
     before do
-      described_class.setup({
-        "shard1" => {
-          "adapter" => "postgresql",
-          "encoding" => "unicode",
-          "database" => "shard1",
-          "username" => "postgres",
-          "password" => nil
-        }
-      })
+      described_class.setup('shard1' => {
+                              'adapter' => 'postgresql',
+                              'encoding' => 'unicode',
+                              'database' => 'shard1',
+                              'username' => 'postgres',
+                              'password' => nil
+                            })
     end
 
     context 'current shard set' do
