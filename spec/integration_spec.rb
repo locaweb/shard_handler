@@ -17,13 +17,13 @@ describe ShardHandler do
     SQL
     DbHelper.connect_to_root
 
-    ShardHandler.setup(DbHelper.shards_config)
+    described_class.setup(DbHelper.shards_config)
   end
 
   after(:all) do
-    if ShardHandler.cache
-      ShardHandler.cache.connection_handler_for('shard1').clear_all_connections!
-      ShardHandler.cache.connection_handler_for('shard2').clear_all_connections!
+    if described_class.cache
+      described_class.cache.connection_handler_for('shard1').clear_all_connections!
+      described_class.cache.connection_handler_for('shard2').clear_all_connections!
     end
     DbHelper.drop_shards
   end
@@ -38,11 +38,11 @@ describe ShardHandler do
 
   context 'shard set' do
     it 'executes the query on the selected shard' do
-      ShardHandler.using('shard1') do
+      described_class.using('shard1') do
         expect(Post.pluck(:title)).to eql(['post from shard1'])
       end
 
-      ShardHandler.using('shard2') do
+      described_class.using('shard2') do
         expect(Post.pluck(:title)).to eql(['post from shard2'])
       end
     end
