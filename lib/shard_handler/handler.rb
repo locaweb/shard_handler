@@ -1,20 +1,22 @@
 module ShardHandler
   class Handler
+    attr_reader :cache
+
     def initialize(configs)
       @cache = {}
       @configs = configs
     end
 
     def cache_connection_handlers
-      resolver = resolver_class.new(@configs)
+      resolver = ActiveRecord::ConnectionAdapters::ConnectionSpecification::Resolver.new(@configs)
 
       @configs.each do |name, _|
         name = name.to_sym
 
-        handler = connection_handler_class.new
-        handler.establish_connection(Model, resolver.spec(name))
+        connection_handler = ActiveRecord::ConnectionAdapters::ConnectionHandler.new
+        connection_handler.establish_connection(Model, resolver.spec(name))
 
-        @cache[name] = handler
+        @cache[name] = connection_handler
       end
     end
 
@@ -22,14 +24,8 @@ module ShardHandler
       @cache[name.to_sym] if name
     end
 
-    protected
-
-    def resolver_class
-      ActiveRecord::ConnectionAdapters::ConnectionSpecification::Resolver
-    end
-
-    def connection_handler_class
-      ActiveRecord::ConnectionAdapters::ConnectionHandler
+    def disconnect_all
+      @cache.values.map(&:clear_all_connections!)
     end
   end
 end

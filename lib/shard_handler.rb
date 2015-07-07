@@ -32,6 +32,10 @@ module ShardHandler
       @handler.connection_handler_for(current_shard)
     end
 
+    def disconnect_all
+      @handler.disconnect_all
+    end
+
     def using(shard, &_block)
       old_shard = current_shard
       self.current_shard = shard

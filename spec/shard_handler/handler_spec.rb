@@ -65,4 +65,17 @@ RSpec.describe ShardHandler::Handler do
       end
     end
   end
+
+  describe '#disconnect_all' do
+    before do
+      subject.cache_connection_handlers
+    end
+
+    it 'clear all active connections' do
+      expect(subject.cache.fetch(:shard1)).to receive(:clear_all_connections!)
+      expect(subject.cache.fetch(:shard2)).to receive(:clear_all_connections!)
+
+      subject.disconnect_all
+    end
+  end
 end

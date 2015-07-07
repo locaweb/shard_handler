@@ -36,10 +36,7 @@ describe ShardHandler do
   end
 
   after do
-    if described_class.handler
-      described_class.handler.connection_handler_for('shard1').clear_all_connections!
-      described_class.handler.connection_handler_for('shard2').clear_all_connections!
-    end
+    described_class.disconnect_all
   end
 
   context 'no shard set' do
