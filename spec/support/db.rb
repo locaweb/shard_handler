@@ -1,7 +1,7 @@
-class DbHelper
+class Db
   class << self
-    def db_config
-      @db_config ||= YAML.load_file('spec/database.yml')['test']
+    def config
+      @config ||= YAML.load_file('spec/database.yml')['test']
     end
 
     def shards_config
@@ -16,7 +16,7 @@ class DbHelper
     # root actions on PostgreSQL.
     def connect_to_root
       ActiveRecord::Base.establish_connection(
-        db_config.merge('database' => 'postgres'))
+        config.merge('database' => 'postgres'))
     end
 
     # Connects to a shard database. This connection can be used later via

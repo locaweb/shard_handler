@@ -1,23 +1,23 @@
 require 'spec_helper'
-require 'db_helper'
+require 'support/db'
 
 class Post < ShardHandler::Model
 end
 
 describe ShardHandler do
   before(:all) do
-    DbHelper.setup_shards
-    DbHelper.connect_to_shard('shard1')
-    DbHelper.connection.execute <<-SQL
+    Db.setup_shards
+    Db.connect_to_shard('shard1')
+    Db.connection.execute <<-SQL
       INSERT INTO posts (title) VALUES ('post from shard1')
     SQL
-    DbHelper.connect_to_shard('shard2')
-    DbHelper.connection.execute <<-SQL
+    Db.connect_to_shard('shard2')
+    Db.connection.execute <<-SQL
       INSERT INTO posts (title) VALUES ('post from shard2')
     SQL
-    DbHelper.connect_to_root
+    Db.connect_to_root
 
-    described_class.setup(DbHelper.shards_config)
+    described_class.setup(Db.shards_config)
   end
 
   after(:all) do
