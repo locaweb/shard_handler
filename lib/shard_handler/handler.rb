@@ -21,7 +21,10 @@ module ShardHandler
     end
 
     def connection_handler_for(name)
-      @cache[name.to_sym] if name
+      return if name.nil?
+      @cache.fetch(name.to_sym) do
+        fail UnknownShardError
+      end
     end
 
     def disconnect_all

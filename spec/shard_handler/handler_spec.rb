@@ -64,6 +64,14 @@ RSpec.describe ShardHandler::Handler do
         expect(subject.connection_handler_for(nil)).to be nil
       end
     end
+
+    context 'passing an inexistent shard name' do
+      it 'raises an error' do
+        expect do
+          subject.connection_handler_for(:foobar)
+        end.to raise_error(ShardHandler::UnknownShardError)
+      end
+    end
   end
 
   describe '#disconnect_all' do

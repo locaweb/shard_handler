@@ -5,7 +5,7 @@ require 'shard_handler/handler'
 require 'active_support/per_thread_registry'
 
 module ShardHandler
-  class InvalidShardName < StandardError; end
+  class UnknownShardError < StandardError; end
 
   class RuntimeRegistry
     extend ActiveSupport::PerThreadRegistry
