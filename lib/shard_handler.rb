@@ -1,6 +1,6 @@
 require 'shard_handler/version'
 require 'shard_handler/model'
-require 'shard_handler/cache'
+require 'shard_handler/handler'
 
 require 'active_support/per_thread_registry'
 
@@ -13,11 +13,11 @@ module ShardHandler
   end
 
   class << self
-    attr_reader :cache
+    attr_reader :handler
 
-    def setup(shards_config)
-      @cache = Cache.new(shards_config)
-      @cache.cache_connection_handlers
+    def setup(config)
+      @handler = Handler.new(config)
+      @handler.cache_connection_handlers
     end
 
     def current_shard
@@ -29,7 +29,7 @@ module ShardHandler
     end
 
     def current_connection_handler
-      @cache.connection_handler_for(current_shard)
+      @handler.connection_handler_for(current_shard)
     end
 
     def using(shard, &_block)

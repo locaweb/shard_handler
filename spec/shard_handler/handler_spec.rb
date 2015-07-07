@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe ShardHandler::Cache do
+RSpec.describe ShardHandler::Handler do
   let(:configs) do
     {
       'shard1' => {

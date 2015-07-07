@@ -1,5 +1,5 @@
 module ShardHandler
-  class Cache
+  class Handler
     def initialize(configs)
       @cache = {}
       @configs = configs

@@ -36,9 +36,9 @@ describe ShardHandler do
   end
 
   after do
-    if described_class.cache
-      described_class.cache.connection_handler_for('shard1').clear_all_connections!
-      described_class.cache.connection_handler_for('shard2').clear_all_connections!
+    if described_class.handler
+      described_class.handler.connection_handler_for('shard1').clear_all_connections!
+      described_class.handler.connection_handler_for('shard2').clear_all_connections!
     end
   end
 
