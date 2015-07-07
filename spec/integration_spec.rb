@@ -6,26 +6,40 @@ end
 
 describe ShardHandler do
   before(:all) do
-    Db.setup_shards
+    Db.setup
+
     Db.connect_to_shard('shard1')
+    silence_stream(STDOUT) do
+      load('spec/support/shard_schema.rb')
+    end
     Db.connection.execute <<-SQL
       INSERT INTO posts (title) VALUES ('post from shard1')
     SQL
+
     Db.connect_to_shard('shard2')
+    silence_stream(STDOUT) do
+      load('spec/support/shard_schema.rb')
+    end
     Db.connection.execute <<-SQL
       INSERT INTO posts (title) VALUES ('post from shard2')
     SQL
-    Db.connect_to_root
 
-    described_class.setup(Db.shards_config)
+    Db.connect_to_root
   end
 
   after(:all) do
+    Db.teardown
+  end
+
+  before do
+    described_class.setup(Db.shards_config)
+  end
+
+  after do
     if described_class.cache
       described_class.cache.connection_handler_for('shard1').clear_all_connections!
       described_class.cache.connection_handler_for('shard2').clear_all_connections!
     end
-    DbHelper.drop_shards
   end
 
   context 'no shard set' do

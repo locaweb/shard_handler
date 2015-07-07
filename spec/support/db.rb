@@ -12,47 +12,27 @@ class Db
       ActiveRecord::Base.connection
     end
 
-    # Connects to the master database. This database must be used to perform
-    # root actions on PostgreSQL.
     def connect_to_root
       ActiveRecord::Base.establish_connection(
         config.merge('database' => 'postgres'))
     end
 
-    # Connects to a shard database. This connection can be used later via
-    # ActiveRecord::Base.connection
     def connect_to_shard(name)
       ActiveRecord::Base.establish_connection(shards_config[name])
     end
 
-    # Creates two shards databases and its tables. Must be executed on a clean
-    # environment.
-    def setup_shards
-      connect_to_root
-
-      shards_config.each do |_shard, config|
-        connection.create_database(config['database'], config)
-        ActiveRecord::Base.establish_connection(config)
-        execute_migrations
+    def setup
+      shards_config.each do |shard, config|
+        connect_to_root
+        connection.create_database(config.fetch('database'), config)
+        connect_to_shard(shard)
       end
     end
 
-    def drop_shards
-      connect_to_root
-
+    def teardown
       shards_config.each do |_shard, config|
-        connection.drop_database(config['database'])
-      end
-    end
-
-    private
-
-    def execute_migrations
-      ActiveRecord::Schema.define(version: 20_140_407_140_000) do
-        create_table 'posts', force: true do |t|
-          t.text 'title'
-          t.text 'body'
-        end
+        connect_to_root
+        connection.drop_database(config.fetch('database'))
       end
     end
   end
