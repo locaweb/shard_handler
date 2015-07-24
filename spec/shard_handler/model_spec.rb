@@ -64,6 +64,32 @@ RSpec.describe ShardHandler::Model do
     end
   end
 
+  describe '.using' do
+    it 'yields a block' do
+      expect do |b|
+        described_class.using(:shard1, &b)
+      end.to yield_with_no_args
+    end
+
+    it 'changes the current shard name when executing the block' do
+      expect(described_class.current_shard).to be nil
+
+      described_class.using(:shard1) do
+        expect(described_class.current_shard).to be :shard1
+      end
+    end
+
+    it 'changes current shard name back to its value before block execution' do
+      described_class.current_shard = :shard2
+
+      described_class.using(:shard1) do
+        expect(described_class.current_shard).to be :shard1
+      end
+
+      expect(described_class.current_shard).to be :shard2
+    end
+  end
+
   describe '.establish_connection' do
     it 'raises an error' do
       expect do

@@ -22,6 +22,14 @@ module ShardHandler
         @handler.connection_handler_for(current_shard) || super
       end
 
+      def using(shard, &_block)
+        old_shard = current_shard
+        self.current_shard = shard
+        yield
+      ensure
+        self.current_shard = old_shard
+      end
+
       private :establish_connection
     end
   end
