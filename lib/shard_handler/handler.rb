@@ -2,9 +2,10 @@ module ShardHandler
   class Handler
     attr_reader :cache
 
-    def initialize(configs)
-      @cache = {}
+    def initialize(klass, configs)
+      @klass = klass
       @configs = configs
+      @cache = {}
     end
 
     def setup
@@ -14,7 +15,7 @@ module ShardHandler
         name = name.to_sym
 
         connection_handler = ActiveRecord::ConnectionAdapters::ConnectionHandler.new
-        connection_handler.establish_connection(Model, resolver.spec(name))
+        connection_handler.establish_connection(@klass, resolver.spec(name))
 
         @cache[name] = connection_handler
       end

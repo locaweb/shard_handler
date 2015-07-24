@@ -20,7 +20,7 @@ RSpec.describe ShardHandler::Handler do
     }
   end
 
-  subject { described_class.new(configs) }
+  subject { described_class.new(ShardHandler::Model, configs) }
 
   describe '#setup' do
     before do
