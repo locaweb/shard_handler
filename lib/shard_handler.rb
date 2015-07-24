@@ -1,6 +1,7 @@
 require 'shard_handler/version'
 require 'shard_handler/model'
 require 'shard_handler/handler'
+require 'shard_handler/thread_registry'
 
 require 'active_support/per_thread_registry'
 
