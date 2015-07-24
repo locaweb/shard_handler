@@ -3,6 +3,19 @@ require 'spec_helper'
 RSpec.describe ShardHandler::Model do
   it { expect(described_class.abstract_class).to be true }
 
+  describe '.setup' do
+    it 'initializes connection handlers cache' do
+      config = instance_double(Hash)
+      handler = instance_double(ShardHandler::Handler)
+
+      expect(ShardHandler::Handler)
+        .to receive(:new).with(ShardHandler::Model, config) { handler }
+      expect(handler).to receive(:setup)
+
+      described_class.setup(config)
+    end
+  end
+
   describe '.current_shard and .current_shard= accessors' do
     it 'sets the shard name for the current thread' do
       described_class.current_shard = :shard1
@@ -25,20 +38,28 @@ RSpec.describe ShardHandler::Model do
   end
 
   describe '.connection_handler' do
-    let(:handler) { double }
+    before do
+      described_class.setup('shard1' => { 'adapter' => 'postgresql' })
+    end
 
-    context 'shard set' do
-      it 'returns a connection handler for the current thread' do
-        allow(ShardHandler).to receive(:current_connection_handler) { handler }
-        expect(described_class.connection_handler).to be handler
+    context 'current shard is nil' do
+      it 'returns the default connection handler' do
+        expect_any_instance_of(ShardHandler::Handler)
+          .to receive(:connection_handler_for).with(nil) { nil }
+
+        expect(described_class.connection_handler)
+          .to be(ActiveRecord::Base.default_connection_handler)
       end
     end
 
-    context 'no shard set' do
-      it 'returns ActiveRecord\'s default connection handler' do
-        allow(ShardHandler).to receive(:current_connection_handler) { nil }
-        expect(described_class.connection_handler)
-          .to be(ActiveRecord::Base.default_connection_handler)
+    context 'current_shard is present' do
+      it 'returns a connection handler for the current thread' do
+        conn_handler = double
+        expect_any_instance_of(ShardHandler::Handler)
+          .to receive(:connection_handler_for).with(:shard1) { conn_handler }
+
+        described_class.current_shard = :shard1
+        expect(described_class.connection_handler).to be conn_handler
       end
     end
   end

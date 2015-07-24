@@ -5,6 +5,11 @@ module ShardHandler
     self.abstract_class = true
 
     class << self
+      def setup(config)
+        @handler = Handler.new(self, config)
+        @handler.setup
+      end
+
       def current_shard
         ThreadRegistry.current_shard
       end
@@ -14,7 +19,7 @@ module ShardHandler
       end
 
       def connection_handler
-        ShardHandler.current_connection_handler || super
+        @handler.connection_handler_for(current_shard) || super
       end
 
       private :establish_connection
