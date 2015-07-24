@@ -98,7 +98,6 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 
   config.before do
-    ShardHandler.current_shard = nil
     ShardHandler::Model.current_shard = nil
   end
 end
