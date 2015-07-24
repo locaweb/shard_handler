@@ -99,5 +99,6 @@ RSpec.configure do |config|
 
   config.before do
     ShardHandler.current_shard = nil
+    ShardHandler::Model.current_shard = nil
   end
 end
