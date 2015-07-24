@@ -1,7 +1,5 @@
 module ShardHandler
   class Handler
-    attr_reader :cache
-
     def initialize(klass, configs)
       @klass = klass
       @configs = configs
