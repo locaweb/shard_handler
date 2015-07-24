@@ -32,11 +32,11 @@ describe ShardHandler do
   end
 
   before do
-    described_class.setup(Db.shards_config)
+    Post.setup(Db.shards_config)
   end
 
   after do
-    described_class.disconnect_all
+    Post.handler.disconnect_all
   end
 
   context 'no shard set' do
@@ -49,11 +49,11 @@ describe ShardHandler do
 
   context 'shard set' do
     it 'executes the query on the selected shard' do
-      described_class.using('shard1') do
+      Post.using('shard1') do
         expect(Post.pluck(:title)).to eql(['post from shard1'])
       end
 
-      described_class.using('shard2') do
+      Post.using('shard2') do
         expect(Post.pluck(:title)).to eql(['post from shard2'])
       end
     end
