@@ -5,9 +5,13 @@ module ShardHandler
     self.abstract_class = true
 
     class << self
+      def handler
+        @@handler
+      end
+
       def setup(config)
-        @handler = Handler.new(self, config)
-        @handler.setup
+        @@handler = Handler.new(self, config)
+        @@handler.setup
       end
 
       def current_shard
@@ -19,7 +23,7 @@ module ShardHandler
       end
 
       def connection_handler
-        @handler.connection_handler_for(current_shard) || super
+        @@handler.connection_handler_for(current_shard) || super
       end
 
       def using(shard, &_block)
