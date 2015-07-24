@@ -57,7 +57,8 @@ RSpec.describe ShardHandler::Handler do
       it 'raises an error' do
         expect do
           subject.connection_handler_for(:foobar)
-        end.to raise_error(ShardHandler::UnknownShardError)
+        end.to raise_error(ShardHandler::UnknownShardError,
+                           ':foobar is not a valid shard name')
       end
     end
   end

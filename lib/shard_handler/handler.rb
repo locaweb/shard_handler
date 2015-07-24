@@ -24,7 +24,7 @@ module ShardHandler
     def connection_handler_for(name)
       return if name.nil?
       @cache.fetch(name.to_sym) do
-        fail UnknownShardError
+        fail UnknownShardError, "#{name.inspect} is not a valid shard name"
       end
     end
 
