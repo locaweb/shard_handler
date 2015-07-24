@@ -16,7 +16,7 @@ module ShardHandler
     attr_reader :handler
 
     def setup(config)
-      @handler = Handler.new(config)
+      @handler = Handler.new(Model, config)
       @handler.setup
     end
 
