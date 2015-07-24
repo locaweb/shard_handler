@@ -11,9 +11,7 @@ RSpec.describe ShardHandler::Handler do
   subject { described_class.new(ShardHandler::Model, configs) }
 
   describe '#setup' do
-    before do
-      subject.setup
-    end
+    before { subject.setup }
 
     it 'creates an instance of connection handler for each shard' do
       expect(subject.connection_handler_for(:shard1))
@@ -29,9 +27,7 @@ RSpec.describe ShardHandler::Handler do
   end
 
   describe '#connection_handler_for' do
-    before do
-      subject.setup
-    end
+    before { subject.setup }
 
     context 'passing a symbol' do
       it 'returns an instance of connection handler' do
@@ -64,9 +60,7 @@ RSpec.describe ShardHandler::Handler do
   end
 
   describe '#disconnect_all' do
-    before do
-      subject.setup
-    end
+    before { subject.setup }
 
     it 'clear all active connections' do
       expect(subject.cache.fetch(:shard1)).to receive(:clear_all_connections!)
