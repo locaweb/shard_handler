@@ -22,9 +22,9 @@ RSpec.describe ShardHandler::Handler do
 
   subject { described_class.new(configs) }
 
-  describe '#cache_connection_handlers' do
+  describe '#setup' do
     before do
-      subject.cache_connection_handlers
+      subject.setup
     end
 
     it 'creates an instance of connection handler for each shard' do
@@ -34,7 +34,7 @@ RSpec.describe ShardHandler::Handler do
         .to be_kind_of(ActiveRecord::ConnectionAdapters::ConnectionHandler)
     end
 
-    it 'does not set the same instance for two different shards' do
+    it 'does not use the same instance for two different shards' do
       expect(subject.connection_handler_for(:shard1))
         .to_not be(subject.connection_handler_for(:shard2))
     end
@@ -42,7 +42,7 @@ RSpec.describe ShardHandler::Handler do
 
   describe '#connection_handler_for' do
     before do
-      subject.cache_connection_handlers
+      subject.setup
     end
 
     context 'passing a symbol' do
@@ -76,7 +76,7 @@ RSpec.describe ShardHandler::Handler do
 
   describe '#disconnect_all' do
     before do
-      subject.cache_connection_handlers
+      subject.setup
     end
 
     it 'clear all active connections' do

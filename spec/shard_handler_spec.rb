@@ -25,7 +25,7 @@ RSpec.describe ShardHandler do
   describe '.setup' do
     it 'initializes connection handlers cache' do
       expect_any_instance_of(ShardHandler::Handler)
-        .to receive(:cache_connection_handlers)
+        .to receive(:setup)
       described_class.setup(double)
     end
   end

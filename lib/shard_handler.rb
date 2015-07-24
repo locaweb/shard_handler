@@ -17,7 +17,7 @@ module ShardHandler
 
     def setup(config)
       @handler = Handler.new(config)
-      @handler.cache_connection_handlers
+      @handler.setup
     end
 
     def current_shard

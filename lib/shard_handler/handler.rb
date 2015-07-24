@@ -7,7 +7,7 @@ module ShardHandler
       @configs = configs
     end
 
-    def cache_connection_handlers
+    def setup
       resolver = ActiveRecord::ConnectionAdapters::ConnectionSpecification::Resolver.new(@configs)
 
       @configs.each do |name, _|
