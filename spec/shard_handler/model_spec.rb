@@ -92,6 +92,11 @@ RSpec.describe ShardHandler::Model do
 
       expect(described_class.current_shard).to be :shard2
     end
+
+    it 'returns any connections back to the pool' do
+      expect(described_class).to receive(:clear_active_connections!)
+      described_class.using(:shard1) {}
+    end
   end
 
   describe '.establish_connection' do
