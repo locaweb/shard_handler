@@ -65,6 +65,10 @@ RSpec.describe ShardHandler::Model do
   end
 
   describe '.using' do
+    before do
+      described_class.setup('shard1' => { 'adapter' => 'postgresql' })
+    end
+
     it 'yields a block' do
       expect do |b|
         described_class.using(:shard1, &b)
