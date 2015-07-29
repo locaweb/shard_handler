@@ -1,11 +1,20 @@
 module ShardHandler
+  # Handles which {ConnectionHandler} instance should be used based on the
+  # shard name that is set for the Thread. Each {Model} class has its own
+  # {Handler}.
+  #
+  # @see Model
   class Handler
+    # @param klass [ActiveRecord::Base] model class
+    # @param configs [Hash] a hash with database connection settings
     def initialize(klass, configs)
       @klass = klass
       @configs = configs
       @cache = {}
     end
 
+    # Creates a {ConnectionHandler} instance for each configured shard and puts
+    # it on cache to be used later by {#connection_handler_for}.
     def setup
       resolver = ActiveRecord::ConnectionAdapters::ConnectionSpecification::Resolver.new(@configs)
 
@@ -19,6 +28,10 @@ module ShardHandler
       end
     end
 
+    # Returns the appropriate ConnectionHandler instance for the given shard
+    # name.
+    #
+    # @param name [Symbol, String] shard name
     def connection_handler_for(name)
       return if name.nil?
       @cache.fetch(name.to_sym) do
@@ -26,6 +39,7 @@ module ShardHandler
       end
     end
 
+    # Disconnects from all shards.
     def disconnect_all
       @cache.values.map(&:clear_all_connections!)
     end
