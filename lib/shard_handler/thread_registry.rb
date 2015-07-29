@@ -7,6 +7,7 @@ module ShardHandler
   # the current thread and not on process or other threads.
   #
   # @see ActiveSupport::PerThreadRegistry
+  # @api private
   class ThreadRegistry
     extend ActiveSupport::PerThreadRegistry
     attr_accessor :current_shard
