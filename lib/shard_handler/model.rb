@@ -23,6 +23,7 @@ module ShardHandler
       end
 
       def connection_handler
+        fail(SetupError, 'the model was not setup') unless @@handler
         @@handler.connection_handler_for(current_shard) || super
       end
 

@@ -5,6 +5,7 @@ RSpec.describe ShardHandler::Model do
     # Clean up handler to avoid issues with mocks
     described_class.class_variable_set(:@@handler, nil)
   end
+
   it { expect(described_class.abstract_class).to be true }
 
   describe '.setup' do
@@ -42,11 +43,20 @@ RSpec.describe ShardHandler::Model do
   end
 
   describe '.connection_handler' do
-    before do
-      described_class.setup('shard1' => { 'adapter' => 'postgresql' })
+    context 'model was not setup' do
+      it 'raises an error' do
+        expect do
+          described_class.connection_handler
+        end.to raise_error(ShardHandler::SetupError,
+                           'the model was not setup')
+      end
     end
 
     context 'current shard is nil' do
+      before do
+        described_class.setup('shard1' => { 'adapter' => 'postgresql' })
+      end
+
       it 'returns the default connection handler' do
         expect_any_instance_of(ShardHandler::Handler)
           .to receive(:connection_handler_for).with(nil) { nil }
@@ -57,6 +67,10 @@ RSpec.describe ShardHandler::Model do
     end
 
     context 'current_shard is present' do
+      before do
+        described_class.setup('shard1' => { 'adapter' => 'postgresql' })
+      end
+
       it 'returns a connection handler for the current thread' do
         conn_handler = double
         expect_any_instance_of(ShardHandler::Handler)
