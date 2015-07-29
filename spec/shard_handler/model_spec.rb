@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 RSpec.describe ShardHandler::Model do
+  before do
+    # Clean up handler to avoid issues with mocks
+    described_class.class_variable_set(:@@handler, nil)
+  end
   it { expect(described_class.abstract_class).to be true }
 
   describe '.setup' do
