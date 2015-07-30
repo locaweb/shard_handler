@@ -52,6 +52,8 @@ RSpec.describe ShardHandler::Model do
   describe '.connection_handler' do
     context 'model was not setup' do
       it 'raises an error' do
+        described_class.current_shard = :foobar
+
         expect do
           described_class.connection_handler
         end.to raise_error(ShardHandler::SetupError,
@@ -66,7 +68,7 @@ RSpec.describe ShardHandler::Model do
 
       it 'returns the default connection handler' do
         expect_any_instance_of(ShardHandler::Handler)
-          .to receive(:connection_handler_for).with(nil) { nil }
+          .to_not receive(:connection_handler_for)
 
         expect(described_class.connection_handler)
           .to be(ActiveRecord::Base.default_connection_handler)

@@ -61,8 +61,11 @@ module ShardHandler
       # @api private
       # @return (see Handler#connection_handler_for)
       def connection_handler
+        return super if use_master_connection?
+
         fail(SetupError, 'the model was not setup') unless @@handler
-        @@handler.connection_handler_for(current_shard) || super
+
+        @@handler.connection_handler_for(current_shard)
       end
 
       # This method will switch to the passed shard making all queries be
@@ -83,6 +86,12 @@ module ShardHandler
       end
 
       private :establish_connection
+
+      protected
+
+      def use_master_connection?
+        current_shard.nil?
+      end
     end
   end
 end
