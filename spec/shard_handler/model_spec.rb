@@ -10,8 +10,8 @@ RSpec.describe ShardHandler::Model do
 
   describe '.setup' do
     it 'initializes connection handlers cache' do
-      config = instance_double(Hash)
-      handler = instance_double(ShardHandler::Handler)
+      config = double
+      handler = double
 
       expect(ShardHandler::Handler)
         .to receive(:new).with(ShardHandler::Model, config) { handler }
