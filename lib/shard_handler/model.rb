@@ -1,6 +1,26 @@
 require 'active_record'
 
 module ShardHandler
+  # This is an abstract model that adds sharding capabilities on ActiveRecord.
+  # When you need to query different shards using the same model, you must
+  # inherit from this class and configure it.
+  #
+  # @example
+  #   class Post < ShardHandler::Model
+  #   end
+  #
+  #   Post.setup({
+  #     'shard1' => {
+  #       'adapter' => 'postgresql',
+  #       'database' => 'shard_handler_development',
+  #       'username' => 'postgres',
+  #       'password' => ''
+  #     }
+  #   })
+  #
+  #   Post.using(:shard1) do
+  #     Post.update_all(title: 'foo')
+  #   end
   class Model < ActiveRecord::Base
     self.abstract_class = true
 
