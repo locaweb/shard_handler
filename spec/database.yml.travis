@@ -1,0 +1,6 @@
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: multitenancy_tools_test
+  username: postgres
+  password:
