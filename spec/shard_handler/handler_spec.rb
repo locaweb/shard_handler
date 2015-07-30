@@ -43,12 +43,6 @@ RSpec.describe ShardHandler::Handler do
       end
     end
 
-    context 'passing nil' do
-      it 'returns nil' do
-        expect(subject.connection_handler_for(nil)).to be nil
-      end
-    end
-
     context 'passing an inexistent shard name' do
       it 'raises an error' do
         expect do
