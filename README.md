@@ -61,7 +61,7 @@ production:
 And configure your abstract model:
 
 ```ruby
-# cat config/initializers/shard_handler.rb
+# config/initializers/shard_handler.rb
 Shard.setup(Rails.application.config_for(:shards))
 ```
 
@@ -76,7 +76,7 @@ class Contact < Shard
 end
 ```
 
-To execute a query in a shard, you can use the `.switch` method passing the
+To execute a query in a shard, you can use the `.using` method passing the
 appropriate shard name:
 
 ```ruby
