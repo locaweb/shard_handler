@@ -63,7 +63,9 @@ module ShardHandler
       def connection_handler
         return super if use_master_connection?
 
-        fail(SetupError, 'the model was not setup') unless @@handler
+        unless defined?(@@handler)
+          fail(SetupError, 'the model was not setup')
+        end
 
         @@handler.connection_handler_for(current_shard)
       end
