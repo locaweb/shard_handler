@@ -12,16 +12,8 @@ Gem::Specification.new do |spec|
                         'lukspn.27@gmail.com', 'rodolfoliviero@gmail.com']
   spec.summary       = 'This gem is a simple sharding solution for Rails applications'
   spec.description   = 'This gem is a simple sharding solution for Rails applications'
-  spec.homepage      = 'https://code.locaweb.com.br/saas/shard_handler'
+  spec.homepage      = 'https://github.com/locaweb/shard_handler'
   spec.license       = 'MIT'
-
-  # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
-  # delete this section to allow pushing this gem to any host.
-  if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = 'https://gems.locaweb.com.br'
-  else
-    fail 'RubyGems 2.0 or newer is required to protect against public gem pushes.'
-  end
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = 'exe'
