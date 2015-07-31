@@ -15,9 +15,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://github.com/locaweb/shard_handler'
   spec.license       = 'MIT'
 
-  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
-  spec.bindir        = 'exe'
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.files         = Dir['LICENSE.txt', 'README.md', 'lib/**/*']
   spec.require_paths = ['lib']
 
   spec.add_dependency 'activerecord', '~> 4.2.0'
