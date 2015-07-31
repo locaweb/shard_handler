@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
                         'Rodolfo Liviero']
   spec.email         = ['lenon.marcel@gmail.com', 'rafaeltimbosoares@gmail.com',
                         'lukspn.27@gmail.com', 'rodolfoliviero@gmail.com']
-  spec.summary       = 'This gem is a simple sharding solution for Rails applications'
-  spec.description   = 'This gem is a simple sharding solution for Rails applications'
+  spec.summary       = 'A simple sharding solution for Rails applications'
+  spec.description   = 'A simple sharding solution for Rails applications'
   spec.homepage      = 'https://github.com/locaweb/shard_handler'
   spec.license       = 'MIT'
 
