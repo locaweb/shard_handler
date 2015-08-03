@@ -80,10 +80,15 @@ module ShardHandler
         self.current_shard = shard
         yield
       ensure
-        # Returns any connections in use by the current thread back to the pool.
-        # It must be executed before changing the shard name back to its
-        # old value.
-        self.clear_active_connections!
+        # Returns any connections in use back to the pool. It is executed only
+        # if the shard name is different from the old one because one can call
+        # .using multiple times in a chain, like this:
+        #
+        #   using(:shard1) do
+        #     using(:shard1) do
+        #     end
+        #   end
+        self.clear_active_connections! if old_shard != current_shard
         self.current_shard = old_shard
       end
 

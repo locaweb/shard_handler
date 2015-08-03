@@ -121,6 +121,28 @@ RSpec.describe ShardHandler::Model do
       expect(described_class).to receive(:clear_active_connections!)
       described_class.using(:shard1) {}
     end
+
+    context 'chain with the same shard name' do
+      it 'returns connections back only once' do
+        expect(described_class).to receive(:clear_active_connections!).once
+
+        described_class.using(:shard1) do
+          described_class.using(:shard1) do
+          end
+        end
+      end
+    end
+
+    context 'chain with different shard names' do
+      it 'returns connections back to the pool' do
+        expect(described_class).to receive(:clear_active_connections!).twice
+
+        described_class.using(:shard1) do
+          described_class.using(:shard2) do
+          end
+        end
+      end
+    end
   end
 
   describe '.establish_connection' do
