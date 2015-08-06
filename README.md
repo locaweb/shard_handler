@@ -5,9 +5,9 @@
 [![Test Coverage][cc-cov-badge]][cc-cov-details]
 
 This gem is a simple sharding solution for Rails applications. It was created
-to be used in multitenant applications, where data is partitioned across
-multiple databases but accessed through the same ActiveRecord model. Basically,
-this gem is a nice connection switcher for ActiveRecord.
+to be used in multitenant applications, where data is partitioned across a few
+databases but accessed through the same ActiveRecord model. Basically, this gem
+is a nice connection switcher for ActiveRecord.
 
 Keep in mind that this gem is tested only with PostgreSQL databases.
 
@@ -31,7 +31,8 @@ Or install it yourself as:
 
 ## Usage
 
-First, create an abstract model that will handle the shard connection:
+First you must create an abstract model that will switch between shard
+connections:
 
 ```ruby
 class Shard < ShardHandler::Model
@@ -44,29 +45,27 @@ Create a YAML file like this one:
 ```yaml
 # config/shards.yml
 development:
-  shard1:
+  shard1: # shard name
     adapter: postgresql
     database: shard_db_1
     username: postgres
+    # ...
   shard2:
     adapter: postgresql
     database: shard_db_2
     username: postgres
-test:
-  # ...
-production:
-  # ...
+    # ...
 ```
 
-And configure your abstract model:
+And configure your Shard model:
 
 ```ruby
 # config/initializers/shard_handler.rb
 Shard.setup(Rails.application.config_for(:shards))
 ```
 
-Any model that has data shared across shards must inherit from your abstract
-model:
+Any model that has data shared across shards and requires a shard connection
+must inherit from your abstract model:
 
 ```ruby
 class Message < Shard
@@ -76,8 +75,8 @@ class Contact < Shard
 end
 ```
 
-To execute a query in a shard, you can use the `.using` method passing the
-appropriate shard name:
+To execute a query in a shard, you must wrap your code inside a block passed for
+`.using`, like this:
 
 ```ruby
 user = User.first
@@ -130,6 +129,9 @@ After restarting your database, the log will be like this:
 my_db 1 0 - LOG:  statement: SELECT foo FROM bar
 ```
 
+There are more options available, please take a look at
+[PostgreSQL docs][pg-log_line_prefix].
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at
@@ -148,3 +150,4 @@ The gem is available as open source under the terms of the
 [cc-cov-details]: https://codeclimate.com/github/locaweb/shard_handler/coverage
 [docs]: http://www.rubydoc.info/gems/shard_handler
 [rubygems]: https://rubygems.org/gems/shard_handler
+[pg-log_line_prefix]: http://www.postgresql.org/docs/9.4/static/runtime-config-logging.html#GUC-LOG-LINE-PREFIX
